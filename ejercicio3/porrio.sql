@@ -1,4 +1,3 @@
-
 CREATE TABLE apuesta(partido varchar(50), 
        quien_apuesta varchar(50) not null, 
        goles_local unsigned integer not null,

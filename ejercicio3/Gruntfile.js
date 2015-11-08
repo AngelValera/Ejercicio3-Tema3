@@ -1,18 +1,18 @@
 'use strict';
 
 module.exports = function(grunt) {
-
+    
     // Configuración del proyecto
     grunt.initConfig({
 	// incluye la configuración
 	pkg: grunt.file.readJSON('package.json'),
-	docco: {
+	docco: {	   
 	    src: ['*.js'],
 	    options: {
 		output: 'docs/'
 	    }
 	},
-	shell: {
+	shell: { 
 	    options: {
 		stderr: false
             },
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
             },
 	    // para probar el despliegue
 	    puts: {
-		command: 'curl -X PUT http://localhost:5000/porra/Copa-Del-Rey/2015/Betis/Sevilla; curl -X PUT http://localhost:5000/apuesta/Angel/Copa-Del-Rey/2015/Betis/3/Sevilla/0, curl -X PUT http://localhost:5000/apuesta/Pepe/Copa-Del-Rey/2015/Betis/1/Sevilla/0, curl -X PUT http://localhost:5000/porra/Atleti/Barcelona/Champion/2003'
+		command: 'curl -X PUT http://localhost:5000/porra/Madri/Barcelona/Champion/2004; curl -X PUT http://localhost:5000/porra/Madri/Barcelona/Champion/2003, curl -X PUT http://localhost:5000/porra/Atleti/Barcelona/Champion/2003'
 	    }
 	}
     });
