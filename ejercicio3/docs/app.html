@@ -20,8 +20,18 @@
             <div id="jump_page">
               
                 
+                <a class="source" href="Apuesta.html">
+                  Apuesta.js
+                </a>
+              
+                
                 <a class="source" href="Gruntfile.html">
                   Gruntfile.js
+                </a>
+              
+                
+                <a class="source" href="Porra.html">
+                  Porra.js
                 </a>
               
                 
@@ -53,17 +63,16 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
-<span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
+            <div class="content"><div class='highlight'><pre><span class="hljs-pi">"use strict"</span>;
+
+<span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
 <span class="hljs-keyword">var</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);
-<span class="hljs-keyword">var</span> favicon = <span class="hljs-built_in">require</span>(<span class="hljs-string">'static-favicon'</span>);
+<span class="hljs-keyword">var</span> favicon = <span class="hljs-built_in">require</span>(<span class="hljs-string">'serve-favicon'</span>);
 <span class="hljs-keyword">var</span> logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">'morgan'</span>);
 <span class="hljs-keyword">var</span> cookieParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'cookie-parser'</span>);
 <span class="hljs-keyword">var</span> bodyParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'body-parser'</span>);
-
-<span class="hljs-keyword">var</span> routes = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./routes'</span>);
-<span class="hljs-keyword">var</span> users = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./routes/user'</span>);
-
+<span class="hljs-keyword">var</span> routes = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./routes/index'</span>);
+<span class="hljs-keyword">var</span> users = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./routes/users'</span>);
 <span class="hljs-keyword">var</span> app = express();</pre></div></div>
             
         </li>
@@ -75,23 +84,15 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>view engine setup</p>
+              <p>recuerda ejecutar antes grunt creadb</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>app.set(<span class="hljs-string">'views'</span>, path.join(__dirname, <span class="hljs-string">'views'</span>));
-app.set(<span class="hljs-string">'view engine'</span>, <span class="hljs-string">'jade'</span>);
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> db_file = <span class="hljs-string">"porrio.db.sqlite3"</span>;
+<span class="hljs-keyword">var</span> apuesta = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./Apuesta.js"</span>);
+<span class="hljs-keyword">var</span> porra = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./Porra.js"</span>);
 
-app.use(favicon());
-app.use(logger(<span class="hljs-string">'dev'</span>));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, <span class="hljs-string">'public'</span>)));
-app.use(app.router);
-
-app.get(<span class="hljs-string">'/'</span>, routes);
-app.get(<span class="hljs-string">'/users'</span>, users.list);</pre></div></div>
+<span class="hljs-keyword">var</span> porras = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Object</span>;</pre></div></div>
             
         </li>
         
@@ -102,15 +103,13 @@ app.get(<span class="hljs-string">'/users'</span>, users.list);</pre></div></div
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>/ catch 404 and forwarding to error handler</p>
+              <p>Establece el IP y el puerto dependiendo del PaaS que sea</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>) </span>{
-    <span class="hljs-keyword">var</span> err = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Not Found'</span>);
-    err.status = <span class="hljs-number">404</span>;
-    next(err);
-});</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> server_ip_address = process.env.OPENSHIFT_NODEJS_IP || <span class="hljs-string">'0.0.0.0'</span>;
+app.set(<span class="hljs-string">'port'</span>, (process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || <span class="hljs-number">5000</span>));
+app.use(express.static(__dirname + <span class="hljs-string">'/public'</span>));</pre></div></div>
             
         </li>
         
@@ -121,9 +120,12 @@ app.get(<span class="hljs-string">'/users'</span>, users.list);</pre></div></div
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>/ error handlers</p>
+              <p>view engine setup</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>app.set(<span class="hljs-string">'views'</span>, path.join(__dirname, <span class="hljs-string">'views'</span>));
+app.set(<span class="hljs-string">'view engine'</span>, <span class="hljs-string">'jade'</span>);</pre></div></div>
             
         </li>
         
@@ -134,19 +136,44 @@ app.get(<span class="hljs-string">'/users'</span>, users.list);</pre></div></div
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>development error handler
-will print stacktrace</p>
+              <p>uncomment after placing your favicon in /public
+app.use(favicon(path.join(__dirname, ‘public’, ‘favicon.ico’)));</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">if</span> (app.get(<span class="hljs-string">'env'</span>) === <span class="hljs-string">'development'</span>) {
-    app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, req, res, next</span>) </span>{
-        res.render(<span class="hljs-string">'error'</span>, {
-            message: err.message,
-            error: err
-        });
-    });
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>app.use(logger(<span class="hljs-string">'dev'</span>));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: <span class="hljs-literal">false</span> }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, <span class="hljs-string">'public'</span>)));
+app.use(<span class="hljs-string">'/'</span>, routes);
+app.use(<span class="hljs-string">'/users'</span>, users);
+
+app.put(<span class="hljs-string">'/porra/:local/:visitante/:competition/:year'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> req, response </span>) </span>{
+	<span class="hljs-keyword">var</span> nueva_porra = <span class="hljs-keyword">new</span> porra.Porra(req.params.local,req.params.visitante,
+					  req.params.competition, req.params.year );
+	porras[nueva_porra.ID] = nueva_porra;
+	response.send(nueva_porra);
+});
+
+app.put(<span class="hljs-string">'/apuesta/:menda/:competition/:year/:local/:goles_local/:visitante/:goles_visitante'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"> req, response </span>) </span>{
+    <span class="hljs-keyword">var</span> esta_porra = <span class="hljs-keyword">new</span> porra.Porra(req.params.local,req.params.visitante,
+				      req.params.competition, req.params.year );
+    <span class="hljs-keyword">if</span> ( !porras[esta_porra.ID] ) {
+		response.status(<span class="hljs-number">404</span>).send(<span class="hljs-string">"No existe esa porra"</span>);
+    } <span class="hljs-keyword">else</span> {
+	<span class="hljs-keyword">var</span> esta_apuesta =
+	    <span class="hljs-keyword">new</span> apuesta.Apuesta( porras[esta_porra.ID], req.params.menda,
+				 req.params.goles_local,
+				 req.params.goles_visitante );
+		response.status(<span class="hljs-number">200</span>).send( esta_apuesta );
+    }
+
+});
+
+app.get(<span class="hljs-string">'/porras'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>{
+	response.send( porras );
+});</pre></div></div>
             
         </li>
         
@@ -157,20 +184,93 @@ will print stacktrace</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
+              <p>catch 404 and forward to error handler</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>) </span>{
+  <span class="hljs-keyword">var</span> err = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Not Found'</span>);
+  err.status = <span class="hljs-number">404</span>;
+  next(err);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>error handlers</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>development error handler
+will print stacktrace</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">if</span> (app.get(<span class="hljs-string">'env'</span>) === <span class="hljs-string">'development'</span>) {
+  app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, req, res, next</span>) </span>{
+    res.status(err.status || <span class="hljs-number">500</span>);
+    res.render(<span class="hljs-string">'error'</span>, {
+      message: err.message,
+      error: err
+    });
+  });
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
               <p>production error handler
 no stacktraces leaked to user</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>app.use(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, req, res, next</span>) </span>{
-    res.render(<span class="hljs-string">'error'</span>, {
-        message: err.message,
-        error: {}
-    });
+  res.status(err.status || <span class="hljs-number">500</span>);
+  res.render(<span class="hljs-string">'error'</span>, {
+    message: err.message,
+    error: {}
+  });
 });
 
+app.listen(app.get(<span class="hljs-string">'port'</span>), server_ip_address, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Node app is running at "</span> + server_ip_address + <span class="hljs-string">":"</span> + app.get(<span class="hljs-string">'port'</span>));
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Exporta la variable para poder hacer tests</p>
 
-<span class="hljs-built_in">module</span>.exports = app;</pre></div></div>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports = app;</pre></div></div>
             
         </li>
         
