@@ -5,6 +5,7 @@ node_js:
 
 before_install:
   - npm install -g mocha
-  - cd votaEmpresa; npm install .
+  - cd ejercicio3;
+	- npm install .
 script: mocha
 
